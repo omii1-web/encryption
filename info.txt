@@ -1,0 +1,57 @@
+How This Works:
+
+    Password: The password you use to encrypt the file is the crucial part because it helps to derive the encryption key using a process like PBKDF2 (as shown in the script). As long as you remember or have access to the exact same password you used for encryption, you will be able to regenerate the key needed to decrypt the file.
+
+    Salt: The salt is stored in the encrypted file itself, meaning that when you decrypt the file, the salt will be read from the file. The salt doesn't change over time, and it's used to derive the key from the password. So, even after many years, the salt will still be there in the encrypted file, and you can use it along with your password to regenerate the key.
+
+Decryption Process (Even After 5 Years):
+
+    Encryption: When you first encrypt the file, the password you provide is used to generate a key. A random salt is generated, and it's stored along with the encrypted data in the .enc file.
+
+    Decryption after 5 years: If you have the original password and the .enc file, the process will work the same way:
+
+        You provide the password.
+
+        The script extracts the salt from the encrypted file (which is stored in the first 16 bytes).
+
+        Using the password and the salt, the script will regenerate the same encryption key using PBKDF2.
+
+        The key is used to decrypt the file.
+
+Important Considerations:
+
+    Password Stability:
+
+        The password needs to be remembered or stored securely. If you forget it, there's no way to recover the encrypted file.
+
+        If you store the password securely in a password manager or a physical location, you'll have access to it even after many years.
+
+    Salt:
+
+        The salt that was generated and stored with the encrypted file will never change, so you don’t need to worry about that being lost. It's stored within the encrypted file, so it doesn't need to be kept separately.
+
+Example:
+
+Let’s say:
+
+    You encrypt a file in 2025 with the password myStrongPassword.
+
+    The script generates a salt and creates an encrypted file named data.txt.enc.
+
+    Five years later, in 2030, you have the same password myStrongPassword and the encrypted file data.txt.enc.
+
+When you run the decryption process in 2030:
+
+    The script will extract the salt from data.txt.enc.
+
+    The same password (myStrongPassword) will be used to regenerate the same key through PBKDF2 (using the same salt, password, and hashing iterations).
+
+    The correct key will be derived, and the file will be successfully decrypted, even after 5 years.
+
+Key Points to Remember:
+
+    The password never changes: As long as you remember the exact password you used to encrypt the file, you can decrypt it at any time.
+
+    The salt is stored in the encrypted file: This means that you don't need to worry about losing it. As long as you have the .enc file, the salt is already there.
+
+    File remains secure: Even if you don't decrypt the file for many years, as long as the password and the salt are intact, you can always decrypt it when needed.
